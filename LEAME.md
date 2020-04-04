@@ -34,7 +34,6 @@ Con las importaciones de ES también es posible usar componentes individuales. P
 ```javascript
 import { Aes, md5 } from "aif-cipher";
 ```
-import { Barcode, BarcodePicker, ScanSettings, configure } from "scandit-sdk";
 
 #### Configuración
 
