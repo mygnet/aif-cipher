@@ -5,18 +5,18 @@ export function md5(data) {
   md5.update(data + '')
   return md5.digest('hex')
 }
- 
+
 export class Aes {
   static setCredentials(secret, token) {
     if (secret) Aes.secret = secret
     if (token) Aes.token = token
   }
 
-  static encode(data, secret, token) { 
+  static encode(data, secret, token) {
     if (!data) return ''
     let ini = ''
-    token = token || Aes.token 
-    if(!token){ 
+    token = token || Aes.token
+    if (!token) {
       ini = token = md5(secret + Math.random())
     }
     secret = secret || Aes.secret
@@ -26,7 +26,8 @@ export class Aes {
     try {
       data = ini + cp.update(data, 'utf8', 'base64') + cp.final('base64')
     } catch (err) {
-      console.log('Error encode', err)
+      console.log('Failed to encrypt data: [' + data + ']')
+      console.error(err)
     }
     return data
   }
@@ -44,11 +45,10 @@ export class Aes {
     try {
       data = dc.update(data, 'base64', 'utf8') + dc.final('utf8')
     } catch (err) {
-      global.lastError = err.toString()
-      data = null
-      console.log('Error decode', err)
+      console.log('Error decrypting the data: [' + data + ']')
+      console.error(err)
     }
     return data
   }
-
 }
+

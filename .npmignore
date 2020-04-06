@@ -1,4 +1,12 @@
 node_modules
 .gitignore
 .git
-/log
+.babelrc
+.npmignore
+.lintstagedrc.json
+.eslintrc.js
+.eslintignore
+yarn.lock
+src
+test
+log
