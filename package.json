@@ -1,6 +1,6 @@
 {
   "name": "aif-cipher",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A set of basic AES implementation functions aes-256-cbc for encryption and decryption of data packets that can be used to send information to servers compatible with openssl libraries.",
   "author": {
     "name": "Martin R. Mondragon Sotelo",
@@ -9,7 +9,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "node ./test/test1 && node ./test/test2",
-    "build": "babel src -d dist",
+    "build": "babel src -d dist && node ./pk",
     "lint": "eslint ./",
     "lint:fix": "eslint ./ --fix",
     "precommit": "lint-staged"
@@ -36,8 +36,12 @@
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.1.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-minify": "^0.5.1",
     "eslint": "^6.8.0",
     "husky": "^4.2.3",
     "lint-staged": "^10.1.1"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1"
   }
 }

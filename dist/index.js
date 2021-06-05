@@ -1,71 +1,35 @@
-'use strict';
-
-exports.__esModule = true;
-exports.Aes = undefined;
-exports.md5 = md5;
-
-var _crypto = require('crypto');
-
-var _crypto2 = _interopRequireDefault(_crypto);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function md5(data) {
-  var md5 = _crypto2.default.createHash('md5');
-  md5.update(data + '');
-  return md5.digest('hex');
-}
-
-var Aes = exports.Aes = function () {
-  function Aes() {
-    _classCallCheck(this, Aes);
-  }
-
-  Aes.setCredentials = function setCredentials(secret, token) {
-    if (secret) Aes.secret = secret;
-    if (token) Aes.token = token;
-  };
-
-  Aes.encode = function encode(data, secret, token) {
-    if (!data) return '';
-    var ini = '';
-    token = token || Aes.token;
-    if (!token) {
-      ini = token = md5(secret + Math.random());
-    }
-    secret = secret || Aes.secret;
-    var iv = token.substr(0, 16);
-    var key = md5(secret + token);
-    var cp = _crypto2.default.createCipheriv('aes-256-cbc', key, iv);
-    try {
-      data = ini + cp.update(data, 'utf8', 'base64') + cp.final('base64');
-    } catch (err) {
-      console.log('Failed to encrypt data: [' + data + ']');
-      console.error(err);
-    }
-    return data;
-  };
-
-  Aes.decode = function decode(data, secret, token) {
-    if (!data) return '';
-    if (!token && !Aes.token) {
-      token = data.substr(0, 32);
-      data = data.substr(32);
-    } else token = token || Aes.token;
-    secret = secret || Aes.secret;
-    var iv = token.substr(0, 16);
-    var key = md5(secret + token);
-    var dc = _crypto2.default.createDecipheriv('aes-256-cbc', key, iv);
-    try {
-      data = dc.update(data, 'base64', 'utf8') + dc.final('utf8');
-    } catch (err) {
-      console.log('Error decrypting the data: [' + data + ']');
-      console.error(err);
-    }
-    return data;
-  };
-
-  return Aes;
-}();
+'use strict';exports.__esModule=!0,exports.md5=md5,exports.base64Decode=base64Decode,exports.base64Encode=base64Encode,exports.aesSetCredentials=aesSetCredentials,exports.aesEncode=aesEncode,exports.aesDecode=aesDecode;var _crypto=require('crypto'),_crypto2=_interopRequireDefault(_crypto);function _interopRequireDefault(a){return a&&a.__esModule?a:{default:a}}function _classCallCheck(a,b){if(!(a instanceof b))throw new TypeError('Cannot call a class as a function')}var Aes=function(){function a(){_classCallCheck(this,a)}return a.setCredentials=function d(b,c){b&&(a.secret=b),c&&(a.token=c)},a.encode=function i(b,c,d){if(!b)return'';var e='';d=d||a.token,d||(e=d=md5(c+Math.random())),c=c||a.secret;var f=d.substr(0,16),g=md5(c+d),h=_crypto2.default.createCipheriv('aes-256-cbc',g,f);try{b=e+h.update(b,'utf8','base64')+h.final('base64')}catch(a){console.log('Failed to encrypt data: ['+b+']'),console.error(a)}return b},a.decode=function h(b,c,d){if(!b)return'';void 0===d&&void 0===a.token?(d=b.substr(0,32),b=b.substr(32)):d=d||a.token,c=c||a.secret;var e=d.substr(0,16),f=md5(c+d),g=_crypto2.default.createDecipheriv('aes-256-cbc',f,e);try{b=g.update(b,'base64','utf8')+g.final('utf8')}catch(a){console.log('Error decrypting the data: ['+b+']'),console.error(a)}return b},a}();
+/**
+ * Generate the hash of a string with md5 algorithm
+ * @param {string} data string
+ * @returns {string} hash string
+ */function md5(data){var a=_crypto2.default.createHash('md5');return a.update(data+''),a.digest('hex')}
+/**
+ * Decode in base 64
+ * @param {string} data source data
+ * @returns
+ */function base64Decode(data){return Buffer.from(data,'base64').toString('utf-8')}
+/**
+ * Encode in base 64
+ * @param {string} data source data
+ * @returns base-64 encoded data
+ */function base64Encode(data){return Buffer.from(data).toString('base64')}
+/**
+* Set encryption credentials
+* @param {string} secret chain with our secret
+* @param {string} token 32 character token string
+*/function aesSetCredentials(secret,token){return Aes.setCredentials(secret,token)}
+/**
+* Encrypt a string
+* @param {string} data string to encrypt
+* @param {string} secret secret, if not established, the previously established credentials are taken
+* @param {string} token 32 character token string, if not established, the previously established credentials are taken
+* @returns
+*/function aesEncode(data,secret,token){return Aes.encode(data,secret,token)}
+/**
+* Decrypt a string
+* @param {string} data encrypted string
+* @param {string} secret secret, if not established, the previously established credentials are taken
+* @param {string} token 32 character token string, if not established, the previously established credentials are taken
+* @returns
+*/function aesDecode(data,secret,token){return Aes.decode(data,secret,token)}
