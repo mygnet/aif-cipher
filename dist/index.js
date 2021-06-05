@@ -7,7 +7,7 @@
 /**
  * Decode in base 64
  * @param {string} data source data
- * @returns
+ * @returns return returns plaintext
  */function base64Decode(data){return Buffer.from(data,'base64').toString('utf-8')}
 /**
  * Encode in base 64
